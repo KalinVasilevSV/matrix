@@ -1,0 +1,29 @@
+# Matrix Makefile
+# OpenMP modification of Matrix
+
+# Select appropriate compiler.
+CPP=g++
+CPPFLAGS=-O3 -fopenmp
+
+ifdef DEBUG
+CPPFLAGS=-g
+endif
+
+default: omp
+
+omp: ompmatrix
+
+ompmatrix: ompmatrix.cpp OmpMakefile
+	$(CPP) $(CPPFLAGS) -o ompmatrix ompmatrix.cpp 
+
+.PHONY: clean
+clean:
+	-rm ompmatrix
+
+DISTNAME = ompmatrix
+DISTFILES = ompmatrix.cpp OmpMakefile
+
+SRCS = $(CFILES) $(C++FILES) $(C++FILES:%.cxx=%.h)
+
+others:
+	$(CPP) $(CPPFLAGS)
