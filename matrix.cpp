@@ -5,9 +5,9 @@ void Multiply(double *A, double *B, double *C, const long size) // C = A*B
 {
   for (long i=0; i < size; i++)
     for (long j=0; j < size; j++) {
-      C[i*size+j] = 0.0;
+      *C[i*size+j] = 0.0;
       for (long k=0; k < size; k++)
-        C[i*size+j] += A[i*size+k] * B[k*size+j];
+        *C[i*size+j] += *A[i*size+k] * *B[k*size+j];
     }
 }
 
