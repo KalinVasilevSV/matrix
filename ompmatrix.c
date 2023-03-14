@@ -4,17 +4,17 @@
 
 void Multiply(double *A, double *B, double *C, const long size) // C = A*B
 {
-
+  double sum = 0;
   #pragma omp parallel for
-  for (long i=0; i < size; i++){
-     if(omp_get_thread_num()==0 && i==0)
-          printf("allocated threads = %d \n",omp_get_num_threads());
-     #pragma omp parallel for
-     for (long j=i*size; j < i*size+size; j++) {
-       C[j] = 0.0;
-       for (long k=0; k < size; k++)
-         C[j] += A[i*size+k] * B[k*size+j];
-     }
+  for (long i=0; i < size; i+=4){
+    for (long j=0; j < size; j++) {
+//      C[i*size+j] = 0.0;
+      #pragma omp parallel for reduction(+:sum)
+      for (long k=0; k < size; k+=4){
+        sum += A[i*size+k] * B[k*size+j];
+      }
+      C[i*size+j] = sum;
+    }
     }
 }
 
@@ -87,10 +87,10 @@ int main(int argc, char *argv[])
     double *C[size*size];
 
     start = omp_get_wtime();
-    Multiply(A, B, C, size);
+    Multiply((double*)A, (double*)B, (double*)C, size);
     end = omp_get_wtime();
 
-    PrintMatrix(C, size);
+    PrintMatrix((double*)C, size);
     printf("Compute time: %f \n",end-start);
 
     free(*C);

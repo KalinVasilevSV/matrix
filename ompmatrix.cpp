@@ -91,17 +91,16 @@ int main(int argc, char *argv[])
     double B[size][size];
     double C[size][size];
 
-    double sum;
+    double sum = 0;
     start = omp_get_wtime();
 //    Multiply((double*)&A, (double*)&B, (double*)&C, size);
-  #pragma omp parallel for
+  #pragma omp parallel for firstprivate(sum)
   for (long i=0; i < size; i++){
-     sum = 0;
      if(omp_get_thread_num()==0 && i==0)
           printf("allocated threads = %d \n",omp_get_num_threads());
      for (long j=0; j < size; j++) {
        for (long k=0; k < size; k++)
-         sum += (A[i][k] * B[k][j]);
+         sum += A[i][k] * B[k][j];
        C[i][j] = sum;
      }
   }
