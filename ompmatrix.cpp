@@ -87,23 +87,22 @@ int main(int argc, char *argv[])
 //  } else {
     size = atol(argv[1]);
     printf("size=%ld \n", size);
-    double A[size][size];
-    double B[size][size];
-    double C[size][size];
+    double *A = new double[size*size];
+    double *B = new double[size*size];
+    double *C = new double[size*size];
 
     double sum = 0;
     start = omp_get_wtime();
 //    Multiply((double*)&A, (double*)&B, (double*)&C, size);
   #pragma omp parallel for firstprivate(sum)
-  for (long i=0; i < size; i++){
-     if(omp_get_thread_num()==0 && i==0)
-          printf("allocated threads = %d \n",omp_get_num_threads());
-     for (long j=0; j < size; j++) {
-       for (long k=0; k < size; k++)
-         sum += A[i][k] * B[k][j];
-       C[i][j] = sum;
-     }
-  }
+  for (long i=0; i < size; i++)
+    for (long j=0; j < size; j++) {
+      C[i*size+j] = 0.0;
+      for (long k=0; k < size; k++){
+        sum += A[i*size+k] * B[k*size+j];
+      }
+      C[i*size+j] = sum;
+    }
     end = omp_get_wtime();
 
 //    PrintMatrix(*C, size);
