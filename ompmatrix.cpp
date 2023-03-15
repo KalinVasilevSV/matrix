@@ -2,11 +2,14 @@
 #include <stdio.h>
 #include <omp.h>
 
-#define NUM_THREADS
-
 void Multiply(double *A, double *B, double *C, const long size) // C = A*B
-{ double sum;
-  #pragma omp parallel
+{
+  int max_threads = omp_get_max_threads();
+  printf("max possible threads = %d \n",max_threads);
+  omp_set_num_threads(max_threads);
+
+  double sum = 0;
+  #pragma omp parallel shared(A,B,C) firstprivate(sum)
   {
    #pragma omp master
    {
@@ -56,7 +59,6 @@ void Test()
 
 int main(int argc, char *argv[])
 {
-  printf("max possible threads = %d \n",omp_get_max_threads());
   if (argc == 1) {
     Test();
   } else {
