@@ -18,15 +18,6 @@ void Multiply(double *A, double *B, double *C, const long size) // C = A*B
     }
   }
 }
-//       if(omp_get_thread_num()==0 && i==0)
-//          printf("allocated threads = %d \n",omp_get_num_threads());
-
-//void v_mult(double *A, double *B, double *C,long i, long j, long size){
-//    long spot = i*size*j;
-//    long row=i*size,col=j;
-//    for(long k=0;k<size;k++,row=i*size+k,col=k*size+j)
-//        C[spot] += A[row]*B[col];
-//}
 
 //void Multiply(double *A, double *B, double *C, const long size) // C = A*B
 //{
@@ -51,9 +42,7 @@ void Multiply(double *A, double *B, double *C, const long size) // C = A*B
 //    }
 //  }
 //  }
-//}//       if(omp_get_thread_num()==0 && i==0)
-//          printf("allocated threads = %d \n",omp_get_num_threads());
-
+//}
 
 
 void PrintMatrix(double *A, const long size)
